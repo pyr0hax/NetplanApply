@@ -17,6 +17,10 @@ select_netplan_config() {
     fi
 }
 
+read -p "Do you want to use DHCP or Static IP? (dhcp/static): " ip_type
+
+echo "User input: $ip_type"
+
 case "$ip_type" in
     dhcp)
         config="dhcp4: yes"
