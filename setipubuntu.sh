@@ -17,17 +17,22 @@ select_netplan_config() {
     fi
 }
 
-read -p "Do you want to use DHCP or Static IP? (dhcp/static): " ip_type
+case "$ip_type" in
+    dhcp)
+        config="dhcp4: yes"
+        ;;
+    static)
+        read -p "Enter IP address and subnet mask (e.g., 192.168.1.222/24): " ip_subnet
+        read -p "Enter gateway address: " gateway
+        read -p "Enter DNS servers (comma-separated): " dns_servers
 
-if [[ "$ip_type" == "dhcp" ]]; then
-    config="dhcp4: yes"
-else
-    read -p "Enter IP address and subnet mask (e.g., 192.168.1.222/24): " ip_subnet
-    read -p "Enter gateway address: " gateway
-    read -p "Enter DNS servers (comma-separated): " dns_servers
-
-    config="dhcp4: no\n    addresses: [$ip_subnet]\n    gateway4: $gateway\n    nameservers:\n      addresses: [$dns_servers]"
-fi
+        config="dhcp4: no\n    addresses: [$ip_subnet]\n    gateway4: $gateway\n    nameservers:\n      addresses: [$dns_servers]"
+        ;;
+    *)
+        echo "Invalid option. Please choose either dhcp or static."
+        exit 1
+        ;;
+esac
 
 select_netplan_config
 
