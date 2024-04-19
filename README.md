@@ -1,0 +1,2 @@
+# NetplanApply
+Netplan script
